@@ -51,7 +51,12 @@ let moments = [
 ];
 
 app.post('/moments', (req, res) => {
-  const { title, description, image } = req.body;
+  const { title, description, image, created_at } = req.body;
+
+  if (!title || !description || !image || !created_at) {
+    return res.status(400).json({ error: 'incomplete data. required: (title, description, image, created_at).' });
+  }
+
   const id = moments.length + 1;
   const newMoment = { id, title, description, image, created_at };
   moments.push(newMoment);
@@ -59,7 +64,10 @@ app.post('/moments', (req, res) => {
 });
 
 app.get('/moments', (req, res) => {
-  res.json(moments);
+  res.json({
+    message: 'Moments',
+    data: moments
+  });
 });
 
 app.get('/moments/:id', (req, res) => {
